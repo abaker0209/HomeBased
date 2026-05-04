@@ -17,6 +17,8 @@ import itemsRoutes from "./routes/items.js";
 import dashboardRoutes from "./routes/dashboard.js";
 import purchasesRoutes from "./routes/purchases.js";
 import storesRoutes from "./routes/stores.js";
+import platformRoutes from "./routes/platforms.js";
+import listingsRouter from "./routes/listings.js"; 
 
 // connect to express
 const app = express();
@@ -27,6 +29,8 @@ app.use("/api/items", itemsRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/purchases", purchasesRoutes);
 app.use("/api/stores", storesRoutes);
+app.use("/api/platforms", platformRoutes);
+app.use("/api/listings", listingsRouter); 
 
 dotenv.config();
 
