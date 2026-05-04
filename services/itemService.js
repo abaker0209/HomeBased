@@ -9,3 +9,21 @@ export async function createItem(conn, item) {
 
   return result.insertId;
 }
+
+export async function updateItemFromSession(conn, item) { 
+  const result = await conn.query( 
+    `
+    UPDATE items
+    SET 
+      ItemDescription = ?,
+      Listed = 1
+    WHERE ItemID = ?
+    `,
+    [ 
+      item.itemDescription,
+      item.itemID,
+    ],
+  ); 
+
+  return result; 
+}

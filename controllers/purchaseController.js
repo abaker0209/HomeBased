@@ -1,8 +1,9 @@
 import pool from "../db/pool.js";
-import { createStore } from "../services/storeService.js";
+import { findOrCreateStore } from "../services/storeService.js";
 import { createItem } from "../services/itemService.js";
 import { createPurchase } from "../services/purchaseService.js";
 
+// not implemented in the UI yet
 export async function getPurchases(req, res) {
   let conn;
   try {
@@ -16,6 +17,7 @@ export async function getPurchases(req, res) {
   }
 }
 
+// implemented and functioning
 export async function createBulkPurchase(req, res) {
   let conn;
 
@@ -23,9 +25,22 @@ export async function createBulkPurchase(req, res) {
     conn = await pool.getConnection();
     await conn.beginTransaction();
 
-    const { storeName, storeAddress, items } = req.body;
+    let { storeID, storeName, storeAddress, items } = req.body;
 
-    const storeID = await createStore(conn, storeName, storeAddress);
+    console.log("Incoming purchase payload:", req.body);
+
+    // if no item data was included, return an error
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: "No items provided" });
+    }
+    if (!storeID && (!storeName || !storeAdress)) {
+      return res.status(400).json({
+        error: "Must provide either storeID or storeName + storeAddress",
+      });
+    }
+    if (!storeID) {
+      storeID = await findOrCreateStore(conn, storeName, storeAddress);
+    }
 
     for (const item of items) {
       const itemID = await createItem(conn, item);

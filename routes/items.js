@@ -2,15 +2,18 @@ import express from "express";
 import {
   getListedItems,
   getUnlistedItems,
-  addItem,
-  sellItem
+  sellItem,
+  getItemDetails,
+  completeListing,
 } from "../controllers/itemsController.js";
 
 const router = express.Router();
 
 router.get("/listed", getListedItems);
 router.get("/unlisted", getUnlistedItems);
-router.post("/", addItem);
-router.put("/:id/sell", sellItem);
+router.get("/getUnlisted/:ItemID", getItemDetails);
+router.put("/:ItemID/sell", sellItem);
+
+router.post("/", completeListing); 
 
 export default router;
